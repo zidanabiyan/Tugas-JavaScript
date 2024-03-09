@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Pegawai</title>
+<style>
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}
+</style>
+</head>
+<h1 align="center">Data Karyawan</h1>
+<body>
+
+<table id="dataPegawai">
+  <thead>
+    <tr>
+      <th>Nama Pegawai</th>
+      <th>Jabatan</th>
+      <th>Status</th>
+      <th>Gaji Pokok</th>
+      <th>Tunjangan Jabatan</th>
+      <th>BPJS</th>
+      <th>Tunjangan Keluarga</th>
+      <th>Total Gaji</th>
+    </tr>
+  </thead>
+  <tbody id="dataPegawai">
+  </tbody>
+  <tfoot id="totalGaji">
+    <tr>
+      <td colspan="7">Total Gaji</td>
+      <td id="totalGajiValue"></td>
+    </tr>
+  </tfoot>
+</table>
+
+<script>
+// Data Pegawai
+const pegawai = {
+  nama: "Ridwan",
+  jabatan: "manager",
+  status: "menikah"
+};
+
+// Fungsi untuk menghitung gaji
+function hitungGaji(jabatan, gapok, status) {
+  const gajiPokok = gapok;
+  const tunjanganJabatan = 0.15 * gajiPokok;
+  const bpjs = 0.1 * gajiPokok;
+  const tunjanganKeluarga = status === "menikah" ? 0.2 * gajiPokok : 0;
+
+  const totalGaji = gajiPokok + tunjanganJabatan + tunjanganKeluarga + bpjs;
+  return totalGaji;
+}
+
+// Menampilkan data pegawai dalam tabel
+const tbody = document.getElementById("dataPegawai");
+const tr = document.createElement("tr");
+const gajiPokok = pegawai.jabatan === "manager" ? 15000000 : pegawai.jabatan === "Asisten Manager" ? 10000000 : 5000000;
+tr.innerHTML = `
+  <td>${pegawai.nama}</td>
+  <td>${pegawai.jabatan}</td>
+  <td>${pegawai.status}</td>
+  <td>${new Intl.NumberFormat('id-ID').format(gajiPokok)}</td>
+  <td>${new Intl.NumberFormat('id-ID').format(0.15 * gajiPokok)}</td>
+  <td>${new Intl.NumberFormat('id-ID').format(0.1 * gajiPokok)}</td>
+  <td>${new Intl.NumberFormat('id-ID').format(pegawai.status === "menikah" ? 0.2 * gajiPokok : 0)}</td>
+  <td>${new Intl.NumberFormat('id-ID').format(hitungGaji(pegawai.jabatan, gajiPokok, pegawai.status))}</td>
+`;
+tbody.appendChild(tr);
+
+// Menghitung total gaji
+let totalGajiValue = 0;
+if (pegawai.jabatan === "manager") {
+  totalGajiValue = 15000000 * (1 + 0.15 + 0.2) + 15000000 * 0.1;
+} else if (pegawai.jabatan === "Asisten Manager") {
+  totalGajiValue = 10000000 * (1 + 0.15 + 0.2) + 10000000 * 0.1;
+} else {
+  totalGajiValue = 5000000 * (1 + 0.15) - 5000000 * 0.1;
+}
+
+document.getElementById("totalGajiValue").textContent = new Intl.NumberFormat('id-ID').format(totalGajiValue);
+
+</script>
+
+</body>
+</html>
